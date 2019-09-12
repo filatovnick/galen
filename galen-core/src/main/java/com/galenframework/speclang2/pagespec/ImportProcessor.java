@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright 2017 Ivan Shubin http://galenframework.com
+* Copyright 2018 Ivan Shubin http://galenframework.com
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -27,13 +27,14 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ImportProcessor {
-    private final PageSpecHandler pageSpecHandler;
+public class ImportProcessor implements StructNodeProcessor {
+    protected final PageSpecHandler pageSpecHandler;
 
     public ImportProcessor(PageSpecHandler pageSpecHandler) {
         this.pageSpecHandler = pageSpecHandler;
     }
 
+    @Override
     public List<StructNode> process(StringCharReader reader, StructNode statementNode) throws IOException {
 
         List<StructNode> importedNodes = new LinkedList<>();
@@ -51,14 +52,17 @@ public class ImportProcessor {
         return importedNodes;
     }
 
-    private List<StructNode> importPageSpec(String filePath, StructNode origin) throws IOException {
-
+    protected List<StructNode> importPageSpec(String filePath, StructNode origin) throws IOException {
         String fullPath = filePath;
 
         if (pageSpecHandler.getContextPath() != null) {
             fullPath = pageSpecHandler.getContextPath() + "/" + filePath;
         }
 
+        return loadPageSpec(origin, fullPath);
+    }
+
+    protected List<StructNode> loadPageSpec(StructNode origin, String fullPath) throws IOException {
         String fileId = GalenUtils.calculateFileId(fullPath);
         if (!pageSpecHandler.getProcessedImports().contains(fileId)) {
             pageSpecHandler.getProcessedImports().add(fileId);

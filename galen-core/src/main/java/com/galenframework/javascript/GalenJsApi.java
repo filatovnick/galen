@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright 2017 Ivan Shubin http://galenframework.com
+* Copyright 2018 Ivan Shubin http://galenframework.com
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -16,11 +16,14 @@
 package com.galenframework.javascript;
 
 import com.galenframework.api.UnregisteredTestSession;
+import com.galenframework.api.mutation.GalenMutate;
 import com.galenframework.page.Page;
 import com.galenframework.speclang2.pagespec.PageSpecReader;
 import com.galenframework.specs.page.Locator;
 import com.galenframework.specs.page.PageSpec;
 import com.galenframework.speclang2.pagespec.SectionFilter;
+import com.galenframework.suite.actions.mutation.MutationOptions;
+import com.galenframework.suite.actions.mutation.MutationReport;
 import com.galenframework.tests.TestSession;
 import com.galenframework.utils.GalenUtils;
 import com.galenframework.api.Galen;
@@ -68,15 +71,11 @@ public class GalenJsApi {
 
     /**
      * Needed for Javascript based tests
-     * @param driver
-     * @param fileName
-     * @param includedTags
-     * @param excludedTags
-     * @param screenshotFilePath
      * @throws IOException
      */
     public static LayoutReport checkLayout(WebDriver driver, String fileName, String[]includedTags, String[]excludedTags,
-                                   Properties properties, String screenshotFilePath, JsVariable[] vars, JsPageObject[] jsPageObjects) throws IOException {
+                                           String sectionNameFilter, Properties properties, String screenshotFilePath,
+                                           JsVariable[] vars, JsPageObject[] jsPageObjects) throws IOException {
 
         TestSession session = TestSession.current();
         if (session == null) {
@@ -103,7 +102,7 @@ public class GalenJsApi {
         Map<String, Object> jsVariables = convertJsVariables(vars);
 
         LayoutReport layoutReport = Galen.checkLayout(new SeleniumBrowser(driver), fileName,
-                new SectionFilter(includedTagsList, toList(excludedTags)),
+                new SectionFilter(includedTagsList, toList(excludedTags)).withSectionName(sectionNameFilter),
                 properties,
                 jsVariables,
                 screenshotFile,
@@ -154,6 +153,39 @@ public class GalenJsApi {
 
         GalenUtils.attachLayoutReport(layoutReport, report, "<unknown>", includedTagsList);
         return layoutReport;
+    }
+
+    /**
+     * Used in GalenApi.js
+     * @param driver
+     * @param fileName
+     * @param includedTags
+     * @param excludedTags
+     * @return
+     * @throws IOException
+     */
+    public static MutationReport testMutation(WebDriver driver, String fileName, String[]includedTags, String[]excludedTags,
+                                           MutationOptions mutationOptions) throws IOException {
+        TestSession session = TestSession.current();
+        if (session == null) {
+            throw new UnregisteredTestSession("Cannot test mutation as there was no TestSession created");
+        }
+
+        if (fileName == null) {
+            throw new IOException("Spec file name is not defined");
+        }
+
+        List<String> includedTagsList = toList(includedTags);
+
+        TestReport report = session.getReport();
+        MutationReport mutationReport = GalenMutate.checkAllMutations(new SeleniumBrowser(driver), fileName,
+            includedTagsList, toList(excludedTags), mutationOptions, new Properties(), session.getListener());
+
+        if (mutationReport.getInitialLayoutReport() != null) {
+            GalenUtils.attachLayoutReport(mutationReport.getInitialLayoutReport(), report, fileName, includedTagsList);
+        }
+        GalenUtils.attachMutationReport(mutationReport, report, fileName, includedTagsList);
+        return mutationReport;
     }
 
 

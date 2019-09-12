@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright 2017 Ivan Shubin http://galenframework.com
+* Copyright 2018 Ivan Shubin http://galenframework.com
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -184,24 +184,30 @@ public class SpecImageProcessor implements SpecProcessor {
     }
 
     private ImageFilter parseSimpleFilter(StringCharReader reader, String filterName) {
-        Double value = new ExpectNumber().read(reader);
         if ("contrast".equals(filterName)) {
-            return new ContrastFilter(value.intValue());
+            return new ContrastFilter(readIntValue(reader));
         }
         else if ("blur".equals(filterName)) {
-            return new BlurFilter(value.intValue());
+            return new BlurFilter(readIntValue(reader));
         }
         else if ("denoise".equals(filterName)) {
-            return new DenoiseFilter(value.intValue());
+            return new DenoiseFilter(readIntValue(reader));
         }
         else if ("saturation".equals(filterName)) {
-            return new SaturationFilter(value.intValue());
+            return new SaturationFilter(readIntValue(reader));
         }
         else if ("quantinize".equals(filterName)) {
-            return new QuantinizeFilter(value.intValue());
+            return new QuantinizeFilter(readIntValue(reader));
+        }
+        else if ("edges".equals(filterName)) {
+            return new EdgesFilter(readIntValue(reader));
         } else {
             throw new SyntaxException("Unknown image filter: " + filterName);
         }
+    }
+
+    private int readIntValue(StringCharReader reader) {
+        return new ExpectNumber().read(reader).intValue();
     }
 
     private ImageFilter parseMaskFilter(String contextPath, StringCharReader reader) {

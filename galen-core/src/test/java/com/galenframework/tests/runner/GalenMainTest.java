@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright 2017 Ivan Shubin http://galenframework.com
+* Copyright 2018 Ivan Shubin http://galenframework.com
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import com.galenframework.components.DummyCompleteListener;
 import com.galenframework.components.JsTestRegistry;
 import com.galenframework.config.GalenProperty;
 import com.galenframework.runner.CompleteListener;
+import com.galenframework.specs.page.PageSection;
 import com.galenframework.suite.reader.GalenSuiteReader;
 import com.galenframework.tests.GalenTest;
 import com.galenframework.config.GalenConfig;

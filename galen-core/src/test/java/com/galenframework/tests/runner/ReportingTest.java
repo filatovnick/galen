@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright 2017 Ivan Shubin http://galenframework.com
+* Copyright 2018 Ivan Shubin http://galenframework.com
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -254,13 +254,10 @@ public class ReportingTest {
                 "layout-4-objectB1-map.png",
                 "report.html",
                 "report.json",
-                "handlebars-v2.0.0.js",
                 "galen-report.js",
-                "report.css",
+                "galen-report.css",
                 "icon-sprites.png",
-                "jquery-1.11.2.min.js",
-                "tablesorter.js",
-                "tablesorter.css"
+                "vue.js"
         ));
     }
 

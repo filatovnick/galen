@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright 2017 Ivan Shubin http://galenframework.com
+* Copyright 2018 Ivan Shubin http://galenframework.com
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.galenframework.validation;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.galenframework.ocr.GoogleVisionOcrService;
 import com.galenframework.specs.*;
 import com.galenframework.validation.specs.*;
 
@@ -61,7 +62,8 @@ public class ValidationFactory {
         validations.put(SpecImage.class, new SpecValidationImage());
         validations.put(SpecCss.class, new SpecValidationCss());
         validations.put(SpecCount.class, new SpecValidationCount());
-    }
+        validations.put(SpecOcr.class, new SpecValidationOcr(new GoogleVisionOcrService()));
+           }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public static SpecValidation<? extends Spec> getValidation(Spec spec, PageValidation pageValidation) {

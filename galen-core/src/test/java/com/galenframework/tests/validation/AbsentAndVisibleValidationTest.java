@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright 2017 Ivan Shubin http://galenframework.com
+* Copyright 2018 Ivan Shubin http://galenframework.com
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import com.galenframework.specs.SpecVisible;
 import org.testng.annotations.DataProvider;
 
 import java.util.HashMap;
+
 
 public class AbsentAndVisibleValidationTest extends ValidationTestBase {
     @DataProvider
@@ -59,24 +60,24 @@ public class AbsentAndVisibleValidationTest extends ValidationTestBase {
         return new Object[][]{
             // Absent
 
-            {validationResult(singleArea(new Rect(10, 10, 100, 100), "object"), messages("\"object\" is not absent on page")),
+            {validationResult(singleArea(new Rect(10, 10, 100, 100), "object"), messages("\"object\" is not absent on page"), NULL_META),
                 specAbsent(), page(new HashMap<String, PageElement>(){{
                     put("object", element(10, 10, 100, 100));
             }})},
 
             // Visible
 
-            {validationResult(NO_AREA, messages("\"object\" is not visible on page")),
+            {validationResult(NO_AREA, messages("\"object\" is not visible on page"), NULL_META),
                 specVisible(), page(new HashMap<String, PageElement>(){{
                     put("object", invisibleElement(10, 10, 100, 100));
             }})},
 
-            {validationResult(NO_AREA, messages("Cannot find locator for \"object\" in page spec")),
+            {validationResult(NO_AREA, messages("Cannot find locator for \"object\" in page spec"), NULL_META),
                 specVisible(), page(new HashMap<String, PageElement>(){{
                     put("blabla", absentElement(10, 10, 100, 100));
             }})},
 
-            {validationResult(NO_AREA, messages("\"object\" is absent on page")),
+            {validationResult(NO_AREA, messages("\"object\" is absent on page"), NULL_META),
                 specVisible(), page(new HashMap<String, PageElement>(){{
                     put("object", absentElement(10, 10, 100, 100));
             }})}

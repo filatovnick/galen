@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright 2017 Ivan Shubin http://galenframework.com
+* Copyright 2018 Ivan Shubin http://galenframework.com
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class GroupsDefinitionProcessor {
+public class GroupsDefinitionProcessor implements StructNodeProcessor {
     private final PageSpecHandler pageSpecHandler;
 
     public GroupsDefinitionProcessor(PageSpecHandler pageSpecHandler) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright 2017 Ivan Shubin http://galenframework.com
+* Copyright 2018 Ivan Shubin http://galenframework.com
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import com.galenframework.specs.page.Locator;
 
 import org.openqa.selenium.*;
 
+import java.util.Locale;
 
 public class WebPageElement extends PageElement {
 
@@ -55,7 +56,7 @@ public class WebPageElement extends PageElement {
 
     private AreaFinder getAreaFinder() {
         String areaFinderName = GalenConfig.getConfig().getStringProperty(GalenProperty.GALEN_BROWSER_PAGELEMENT_AREAFINDER);
-        return AreaFinder.valueOf(areaFinderName.toUpperCase());
+        return AreaFinder.valueOf(areaFinderName.toUpperCase(Locale.ENGLISH));
     }
 
     private Rect correctedRect(Rect rect, CorrectionsRect corrections) {

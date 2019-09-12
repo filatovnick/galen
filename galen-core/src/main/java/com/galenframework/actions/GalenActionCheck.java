@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright 2017 Ivan Shubin http://galenframework.com
+* Copyright 2018 Ivan Shubin http://galenframework.com
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -58,8 +58,12 @@ public class GalenActionCheck extends GalenAction {
                     .withSize(checkArguments.getScreenSize())
                     .withBrowserFactory(new SeleniumBrowserFactory())
                     .withActions(
-                            asList((GalenPageAction) new GalenPageActionCheck().withSpec(pageSpecPath).withIncludedTags(checkArguments.getIncludedTags())
-                                    .withExcludedTags(checkArguments.getExcludedTags()).withOriginalCommand(originalCommand(arguments))))));
+                            asList((GalenPageAction) new GalenPageActionCheck()
+                                .withSpec(pageSpecPath)
+                                .withIncludedTags(checkArguments.getIncludedTags())
+                                .withExcludedTags(checkArguments.getExcludedTags())
+                                .withSectionNameFilter(checkArguments.getSectionNameFilter())
+                                .withOriginalCommand(originalCommand(arguments))))));
             galenTests.add(test);
         }
 
@@ -72,15 +76,6 @@ public class GalenActionCheck extends GalenAction {
         GalenActionTest.runTests(new EventHandler(), galenTests, testArguments, listener);
     }
 
-
-    private String originalCommand(String[] arguments) {
-        StringBuilder builder = new StringBuilder("check ");
-        for (String argument : arguments) {
-            builder.append(" ");
-            builder.append(argument);
-        }
-        return builder.toString();
-    }
 
     private void verifyArgumentsForPageCheck() {
         if (checkArguments.getUrl() == null) {

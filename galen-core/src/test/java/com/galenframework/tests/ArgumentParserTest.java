@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright 2017 Ivan Shubin http://galenframework.com
+* Copyright 2018 Ivan Shubin http://galenframework.com
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import java.util.List;
 
 import com.galenframework.actions.*;
 import com.galenframework.runner.CombinedListener;
+import com.galenframework.suite.actions.mutation.MutationOptions;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.ArrayUtils;
 import org.testng.annotations.DataProvider;
@@ -212,6 +213,38 @@ public class ArgumentParserTest {
         ));
     }
 
+    @Test
+    public void should_parse_generate_action() {
+        GalenActionGenerate action = (GalenActionGenerate) GalenAction.create("generate",
+            new String []{
+                "path/to/some/page-dump.json",
+                "--export", "destination.gspec"
+            },
+            System.out, System.err, NO_LISTENER
+        );
+        assertThat(action.getGenerateArguments(), is(new GalenActionGenerateArguments()
+            .setPath("path/to/some/page-dump.json")
+            .setExport("destination.gspec")
+        ));
+    }
+
+    @Test
+    public void should_parse_generate_action_with_galenextras_disabled() {
+        GalenActionGenerate action = (GalenActionGenerate) GalenAction.create("generate",
+            new String []{
+                "path/to/some/page-dump.json",
+                "--export", "destination.gspec",
+                "--no-galen-extras"
+            },
+            System.out, System.err, NO_LISTENER
+        );
+        assertThat(action.getGenerateArguments(), is(new GalenActionGenerateArguments()
+            .setPath("path/to/some/page-dump.json")
+            .setExport("destination.gspec")
+            .setUseGalenExtras(false)
+        ));
+    }
+
     @Test(dataProvider = "goodSamples_checkAction")
     public void shouldParse_checkActionArguments(SimpleArguments args, GalenActionCheckArguments expectedArguments) {
         String actionName = args.args[0];
@@ -270,6 +303,15 @@ public class ArgumentParserTest {
                                 .setPaths(asList("some1.spec", "some2.spec"))
                                 .setConfig("/some/config")
                 },
+
+                {args("check", "some1.spec", "--url", "http://mindengine.net", "--config", "/some/config", "--section", "Main*"),
+                    new GalenActionCheckArguments()
+                        .setUrl("http://mindengine.net")
+                        .setPaths(asList("some1.spec"))
+                        .setSectionNameFilter("Main*")
+                        .setConfig("/some/config")
+                },
+
         };
     }
     
@@ -371,6 +413,27 @@ public class ArgumentParserTest {
               args("test", 
                   "--htmlreport", "reports")}
 
+        };
+    }
+
+    @Test(dataProvider = "goodSamples_mutateAction")
+    public void shouldParse_mutateActionArguments(SimpleArguments args, GalenActionMutateArguments expectedArguments) {
+        String actionName = args.args[0];
+        String[] arguments = ArrayUtils.subarray(args.args, 1, args.args.length);
+        GalenActionMutate action = (GalenActionMutate) GalenAction.create(actionName, arguments, System.out, System.err, NO_LISTENER);
+        assertThat(action.getMutateArguments(), is(expectedArguments));
+    }
+
+    @DataProvider
+    public Object[][] goodSamples_mutateAction() {
+        return new Object[][]{
+            {args("mutate", "some1.spec", "--url", "http://mindengine.net", "--include", "desktop", "--offset", "3"),
+                new GalenActionMutateArguments()
+                    .setUrl("http://mindengine.net")
+                    .setPaths(asList("some1.spec"))
+                    .setIncludedTags(asList("desktop"))
+                    .setMutationOptions(new MutationOptions().setPositionOffset(3))
+            }
         };
     }
 

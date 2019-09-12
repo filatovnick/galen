@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright 2017 Ivan Shubin http://galenframework.com
+* Copyright 2018 Ivan Shubin http://galenframework.com
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -70,7 +70,7 @@ public class SpecValidationContains extends SpecValidation<SpecContains> {
         }
         
         if (errorMessages.size() > 0 ) { 
-            throw new ValidationErrorException(objects, errorMessages).withValidationObject(new ValidationObject(objectArea, objectName));
+            throw new ValidationErrorException(objects, errorMessages);
         }
 
         return new ValidationResult(spec, objects);

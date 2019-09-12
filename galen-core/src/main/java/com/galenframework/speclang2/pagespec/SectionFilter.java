@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright 2017 Ivan Shubin http://galenframework.com
+* Copyright 2018 Ivan Shubin http://galenframework.com
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -21,10 +21,16 @@ public class SectionFilter {
     
     private List<String> includedTags;
     private List<String> excludedTags;
+    private String sectionName;
+
     public SectionFilter(List<String> includedTags, List<String> excludedTags) {
         this.setIncludedTags(includedTags);
         this.setExcludedTags(excludedTags);
     }
+
+    public SectionFilter() {
+    }
+
     public List<String> getIncludedTags() {
         return includedTags;
     }
@@ -38,4 +44,16 @@ public class SectionFilter {
         this.excludedTags = excludedTags;
     }
 
+    public SectionFilter withSectionName(String sectionName) {
+        this.sectionName = sectionName;
+        return this;
+    }
+
+    public String getSectionName() {
+        return sectionName;
+    }
+
+    public void setSectionName(String sectionName) {
+        this.sectionName = sectionName;
+    }
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright 2017 Ivan Shubin http://galenframework.com
+* Copyright 2018 Ivan Shubin http://galenframework.com
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -18,10 +18,13 @@ package com.galenframework.specs;
 import java.util.Arrays;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.galenframework.parser.SyntaxException;
+import com.galenframework.reports.json.ToStringSerializer;
 
 import static java.lang.String.format;
 
+@JsonSerialize(using = ToStringSerializer.class)
 public enum Side {
     
     LEFT, RIGHT, TOP, BOTTOM;
@@ -60,5 +63,19 @@ public enum Side {
     public static List<Side> sides(Side...sides) {
         return Arrays.asList(sides);
     }
-    
+
+    public Side opposite() {
+        switch (this) {
+            case LEFT:
+                return RIGHT;
+            case RIGHT:
+                return LEFT;
+            case TOP:
+                return BOTTOM;
+            case BOTTOM:
+                return TOP;
+            default:
+                throw new IllegalStateException("Don't know opposite side for: " + this.toString());
+        }
+    }
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright 2017 Ivan Shubin http://galenframework.com
+* Copyright 2018 Ivan Shubin http://galenframework.com
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import java.util.Map;
 import com.galenframework.specs.Place;
 import com.galenframework.specs.page.Locator;
 import com.galenframework.suite.actions.*;
+import com.galenframework.suite.actions.mutation.MutationOptions;
 import com.galenframework.utils.GalenUtils;
 import com.galenframework.suite.GalenPageAction;
 import com.galenframework.suite.actions.GalenPageActionWait.UntilType;
@@ -70,9 +71,11 @@ public class GalenPageActionReader {
         else if (args[0].equals("dump")) {
             return dumpPageActionFrom(args, actionText);
         }
+        else if (args[0].equals("mutate")) {
+            return mutatePageActionFrom(args, actionText);
+        }
         else throw new SyntaxException(place, "Unknown action: " + args[0]);
     }
-
 
 
     private static GalenPageAction resizeActionFrom(String[] args) {
@@ -110,6 +113,7 @@ public class GalenPageActionReader {
         String specPath = null;
         List<String> includedTags = new LinkedList<>();
         List<String> excludedTags = new LinkedList<>();
+        String sectionNameFilter = null;
         Map<String, Object> jsVariables = new HashMap<>();
 
 
@@ -130,6 +134,8 @@ public class GalenPageActionReader {
                     String varName = argument.getKey().substring(1);
                     String varValue = argument.getValue();
                     jsVariables.put(varName, varValue);
+                } else if (argument.getKey().equals("section")) {
+                    sectionNameFilter = argument.getValue();
                 } else {
                     throw new SyntaxException("Unknown argument: " + argument.getKey());
                 }
@@ -145,7 +151,51 @@ public class GalenPageActionReader {
             .withSpec(specPath)
             .withIncludedTags(includedTags)
             .withExcludedTags(excludedTags)
+            .withSectionNameFilter(sectionNameFilter)
             .withJsVariables(jsVariables);
+    }
+
+    private static GalenPageAction mutatePageActionFrom(String[] args, String originalText) {
+        CommandLineReader reader = new CommandLineReader(args);
+
+        String specPath = null;
+        List<String> includedTags = new LinkedList<>();
+        List<String> excludedTags = new LinkedList<>();
+        String sectionNameFilter = null;
+        int offset = 5;
+
+
+        //Skipping the check action name
+        reader.skipArgument();
+
+        while (reader.hasNext()) {
+            if (!reader.isNextArgument()) {
+                specPath = reader.readNext();
+            } else {
+                Pair<String, String> argument = reader.readArgument();
+
+                if (argument.getKey().equals("include")) {
+                    includedTags.addAll(readTags(argument.getValue()));
+                } else if (argument.getKey().equals("exclude")) {
+                    excludedTags.addAll(readTags(argument.getValue()));
+                } else if (argument.getKey().equals("offset")) {
+                    offset = Integer.parseInt(argument.getValue());
+                } else {
+                    throw new SyntaxException("Unknown argument: " + argument.getKey());
+                }
+            }
+        }
+
+        if (specPath == null || specPath.isEmpty()) {
+            throw new SyntaxException("Missing spec path");
+        }
+
+        return new GalenPageActionMutate()
+                .withSpec(specPath)
+                .withIncludedTags(includedTags)
+                .withExcludedTags(excludedTags)
+                .withMutationOptions(new MutationOptions().setPositionOffset(offset))
+                .withOriginalCommand(originalText);
     }
 
 

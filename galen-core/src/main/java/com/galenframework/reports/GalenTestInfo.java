@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright 2017 Ivan Shubin http://galenframework.com
+* Copyright 2018 Ivan Shubin http://galenframework.com
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import com.galenframework.tests.GalenEmptyTest;
 import com.galenframework.tests.GalenTest;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 public class GalenTestInfo {

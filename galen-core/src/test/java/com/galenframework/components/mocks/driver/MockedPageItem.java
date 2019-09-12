@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright 2017 Ivan Shubin http://galenframework.com
+* Copyright 2018 Ivan Shubin http://galenframework.com
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ public class MockedPageItem {
 
     public boolean matches(By by) {
         if (by instanceof By.ByCssSelector) {
-            String selector = (String)takeFieldValueViaReflection(by, "selector");
+            String selector = (String)takeFieldValueViaReflection(by, "cssSelector");
             if("css".equals(getLocatorType()) && selector.equals(getLocatorValue()) ) {
                 return true;
             }

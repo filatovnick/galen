@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright 2017 Ivan Shubin http://galenframework.com
+* Copyright 2018 Ivan Shubin http://galenframework.com
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -25,13 +25,10 @@ import java.util.List;
 import com.galenframework.runner.events.TestFilterEvent;
 import com.galenframework.runner.events.TestSuiteEvent;
 import com.galenframework.tests.GalenTest;
-import com.galenframework.runner.events.TestFilterEvent;
 import com.galenframework.runner.events.TestRetryEvent;
 
 import com.galenframework.javascript.GalenJsExecutor;
 import com.galenframework.runner.events.TestEvent;
-import com.galenframework.runner.events.TestSuiteEvent;
-import com.galenframework.tests.GalenTest;
 
 public class JsTestCollector {
 

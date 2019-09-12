@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright 2017 Ivan Shubin http://galenframework.com
+* Copyright 2018 Ivan Shubin http://galenframework.com
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ public class LayoutSpec {
     private Place place;
     private String name;
     private List<String> errors;
+    private List<LayoutMeta> meta;
 
     // List of object names to be highlighted in report
     private List<String> highlight = new LinkedList<>();
@@ -91,5 +92,13 @@ public class LayoutSpec {
 
     public void setImageComparison(LayoutImageComparison imageComparison) {
         this.imageComparison = imageComparison;
+    }
+
+    public List<LayoutMeta> getMeta() {
+        return meta;
+    }
+
+    public void setMeta(List<LayoutMeta> meta) {
+        this.meta = meta;
     }
 }

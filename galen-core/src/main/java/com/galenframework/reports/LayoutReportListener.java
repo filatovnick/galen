@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright 2017 Ivan Shubin http://galenframework.com
+* Copyright 2018 Ivan Shubin http://galenframework.com
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -139,9 +139,9 @@ public class LayoutReportListener implements ValidationListener {
     private LayoutImageComparison convertImageComparison(String objectName, ImageComparison imageComparison) throws IOException {
         LayoutImageComparison layoutImageComparison = new LayoutImageComparison();
 
-        layoutImageComparison.setActualImage(rootLayoutReport.registerImageFile(objectName + "-actual", imageComparison.getOriginalFilteredImage()));
-        layoutImageComparison.setExpectedImage(rootLayoutReport.registerImageFile(objectName + "-expected", imageComparison.getSampleFilteredImage()));
-        layoutImageComparison.setComparisonMapImage(rootLayoutReport.registerImageFile(objectName + "-map", imageComparison.getComparisonMap()));
+        layoutImageComparison.setActualImage(rootLayoutReport.registerFile(objectName + "-actual.png", imageComparison.getOriginalFilteredImage()));
+        layoutImageComparison.setExpectedImage(rootLayoutReport.registerFile(objectName + "-expected.png", imageComparison.getSampleFilteredImage()));
+        layoutImageComparison.setComparisonMapImage(rootLayoutReport.registerFile(objectName + "-map.png", imageComparison.getComparisonMap()));
 
         return layoutImageComparison;
     }
@@ -183,6 +183,8 @@ public class LayoutReportListener implements ValidationListener {
     private void addResultToSpec(LayoutSpec spec, ValidationResult result) {
         currentReport().putObjects(result.getValidationObjects());
         spec.setHighlight(convertToObjectNames(result.getValidationObjects()));
+
+        spec.setMeta(result.getMeta());
 
         if (result.getError() != null) {
             spec.setErrors(result.getError().getMessages());

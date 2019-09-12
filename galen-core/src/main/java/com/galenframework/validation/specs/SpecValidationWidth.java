@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright 2017 Ivan Shubin http://galenframework.com
+* Copyright 2018 Ivan Shubin http://galenframework.com
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -16,9 +16,17 @@
 package com.galenframework.validation.specs;
 
 import com.galenframework.page.PageElement;
+import com.galenframework.reports.model.LayoutMeta;
+import com.galenframework.specs.Range;
+import com.galenframework.specs.Side;
 import com.galenframework.specs.SpecWidth;
 
 public class SpecValidationWidth extends SpecValidationSize<SpecWidth>{
+
+    @Override
+    protected LayoutMeta createMeta(String objectName, String expected, String realValue) {
+        return LayoutMeta.distance(objectName, Side.LEFT, objectName, Side.RIGHT, expected, realValue);
+    }
 
     @Override
     protected String getUnitName() {

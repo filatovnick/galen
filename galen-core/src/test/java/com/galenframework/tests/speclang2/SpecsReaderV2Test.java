@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright 2017 Ivan Shubin http://galenframework.com
+* Copyright 2018 Ivan Shubin http://galenframework.com
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -22,11 +22,14 @@ import static com.galenframework.specs.Side.LEFT;
 import static com.galenframework.specs.Side.RIGHT;
 import static com.galenframework.specs.Side.TOP;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -1128,6 +1131,16 @@ public class SpecsReaderV2Test {
         assertThat(spec.getErrorRate().getType(), is(SpecImage.ErrorRateType.PIXELS));
     }
 
+    @Test public void shouldReadSpec_image_filter_edges() throws IOException {
+        SpecImage spec = (SpecImage) readSpec("image file img.png, filter edges 34");
+        assertThat(spec.getImagePaths(), contains("img.png"));
+        assertThat(spec.getOriginalFilters().size(), is(1));
+        assertThat(spec.getOriginalFilters().get(0), is(instanceOf(EdgesFilter.class)));
+
+        EdgesFilter filter = (EdgesFilter) spec.getOriginalFilters().get(0);
+        assertThat(filter.getTolerance(), is(34));
+    }
+
     @Test
     public void shouldReadSpec_component() throws IOException {
         SpecComponent spec = (SpecComponent)readSpec("component some.spec");
@@ -1215,6 +1228,30 @@ public class SpecsReaderV2Test {
         assertThat(spec.getPattern(), is("menu-item-*"));
         assertThat(spec.getAmount(), is(Range.greaterThan(8)));
         assertThat(spec.getOriginalText(), is("count any menu-item-* is > 8"));
+    }
+
+    @Test
+    public void should_read_spec_ocr() {
+        SpecOcr spec = (SpecOcr)readSpec("ocr text is \"hello world\"");
+        assertThat(spec.getText(), is("hello world"));
+        assertThat(spec.getType(), is(SpecOcr.Type.IS));
+        assertThat(spec.getOperations(), is(emptyList()));
+    }
+
+    @Test
+    public void should_read_spec_ocr_lowercase() {
+        SpecOcr spec = (SpecOcr)readSpec("ocr text lowercase is \"hello world\"");
+        assertThat(spec.getText(), is("hello world"));
+        assertThat(spec.getType(), is(SpecOcr.Type.IS));
+        assertThat(spec.getOperations(), is(singletonList("lowercase")));
+    }
+
+    @Test
+    public void should_read_spec_ocr_lowercase_singleline() {
+        SpecOcr spec = (SpecOcr)readSpec("ocr text lowercase singleline is \"hello world\"");
+        assertThat(spec.getText(), is("hello world"));
+        assertThat(spec.getType(), is(SpecOcr.Type.IS));
+        assertThat(spec.getOperations(), is(asList("lowercase", "singleline")));
     }
 
     @Test(expectedExceptions = SyntaxException.class,

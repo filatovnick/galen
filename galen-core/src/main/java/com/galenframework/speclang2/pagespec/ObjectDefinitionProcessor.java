@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright 2017 Ivan Shubin http://galenframework.com
+* Copyright 2018 Ivan Shubin http://galenframework.com
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import java.util.*;
 
 import static java.lang.String.format;
 
-public class ObjectDefinitionProcessor {
+public class ObjectDefinitionProcessor implements StructNodeProcessor {
     public static final String GROUPED = "@grouped";
     private final PageSpecHandler pageSpecHandler;
     private static final String CORRECTIONS_SYMBOL = "@";
